@@ -1,3 +1,3 @@
 # 🤖 Skills
 
-This PR contains my skills for Agentic coding, written for Claude.
+This Repo contains my skills for Agentic coding, written for Claude.
