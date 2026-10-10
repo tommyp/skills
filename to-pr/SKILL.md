@@ -55,6 +55,9 @@ skim the commit log too if there are several commits.
   just the title and body
 - **Be concise.** Prioritise brevity over completeness — a sharp four-line description beats
   a padded ten-line one
+- **In a list, separate the item from its detail with ` - `, not a full stop.** The item is
+  usually a filename, function, or token name, so it reads as a label rather than a sentence:
+  `` `text/2` - Was inline `LazyHTML.query(…) |> LazyHTML.text()` ``
 - **Backtick every filename, path, and code identifier** — token/var names (`--radius-3`),
   file paths (`assets/css/tokens.css`), function/module names, glob patterns (`*.tokens.json`).
   Applies throughout the whole body, not just in a list of changes.
@@ -67,6 +70,14 @@ upload an image to a PR body, so always leave a `_TODO: screenshot_` placeholder
 heading and create the PR anyway — don't ask the user to attach one in chat, and don't block
 on it. In update mode, only add this section if one isn't already present in the existing PR
 body worth preserving.
+
+### Unslop pass
+
+Run the `unslop` skill over the title and body and apply what it finds, before showing the
+draft in Step 4. Never present a draft that hasn't been through it. The tells that keep
+surviving into these descriptions are rhetorical inversions ("Gone are the..."), reassurance
+filler ("Nothing breaks today", "worth a look"), em dashes, incidental detail the diff stat
+already shows, and sentences that cram two unrelated points together.
 
 ## Step 4 — Present for approval
 

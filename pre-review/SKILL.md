@@ -42,7 +42,7 @@ has actually pushed back on.
   and ADRs — example code must not violate the style guide.
 - **Mix task namespacing**: Hyphae Mix tasks live under `Mix.Tasks.Hyphae.*` so they get the
   `hyphae.` prefix and group together in `mix help`. File named `hyphae.<task>.ex`.
-- **British English** spelling in all naming.
+- **American English** spelling in all naming.
 - **`:for` / `:if` over block forms** in HEEx (also an internal-consistency point — see below).
 - **Destructuring over struct/map dot access**: `field.errors`, `assigns.id`, `socket.assigns.x`
   etc. outside HEEx must be destructured instead (`%FormField{errors: errors} = field`,
@@ -77,9 +77,18 @@ even when nothing else looks wrong.
     `--font-family-*`, `--font-size-*`, `--font-weight-*`, and `--space-*` scales are the
     established direct-use layer for components (every sibling component uses them). Do not
     flag a component for referencing these.
-- **No hard-coded values where a token should exist**: literal `rem` sizes, literal
-  `font-weight: 600`, etc. in component styles — flag and ask whether a semantic var covers
-  it, even if none currently exists (worth raising rather than silently hard-coding).
+- **A value only needs a token if it would change with the theme.** This is the test to apply
+  before flagging anything as hard-coded. Colour, and anything else that differs between
+  light/dark or across themes, must go through a token — that is what the token layer is *for*.
+  Fixed sizing does not: a literal `height: 0.5rem` on a status dot, a `max-width: 20rem` on a
+  search field, a `flex-basis`, a one-off gap that no scale covers — these are the same in every
+  theme, so a token buys nothing and only adds indirection. Do **not** flag them.
+- **No hard-coded values where a token should exist**: a literal colour, shadow, or border
+  colour in component styles — flag and ask whether a semantic var covers it, even if none
+  currently exists (worth raising rather than silently hard-coding). Apply the theme test above
+  first: if the value is theme-invariant sizing, it is fine as a literal.
+  `font-weight: 600` and similar numeric weights are already settled as accepted — see
+  [[feedback_hardcoded-font-weight-accepted]].
 - **No BEM-style class names** in colocated CSS (`--` modifiers, `__` elements, e.g.
   `.alert--no-title`, `.icon__error`). Flat single-dash names instead (`.alert-no-title`,
   `.icon-error`) — see [[feedback_css-class-and-ordering-conventions]].
