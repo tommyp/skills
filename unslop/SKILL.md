@@ -12,7 +12,7 @@ Edit text to remove AI patterns and add human voice.
 1. Scan for the patterns below.
 2. Rewrite. Preserve meaning, match intended tone.
 3. Add soul (see next section).
-4. Self-audit: "What makes this obviously AI generated?" Fix remaining tells.
+4. Self-audit: "What makes this obviously AI generated?" Fix remaining tells. Density matters more than any single word. One "crucial" proves little, five tells in a paragraph prove a lot.
 5. Search the finished draft for the words this file names, "carries", "worth a look", "crucial", "showcase" and the rest. Two or three usually survive a first draft, and a pass done from memory misses them. The full word list is `banned.tsv` beside this file, and `~/.claude/hooks/unslop_lint.py` blocks any file edit, PR body or reply that adds one. Add new words to `banned.tsv`, not just this file.
 
 ## Adding soul
@@ -30,61 +30,69 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 
 ### Content
 
-1. **Puffery.** "pivotal moment", "testament to", "evolving landscape", "setting the stage for", "indelible mark", "deeply rooted". Cut puffery, state what happened.
+1. **Puffery.** "pivotal moment", "testament to", "evolving landscape", "setting the stage for", "indelible mark", "deeply rooted", "plays a key role", "reflects broader", "marks a shift", "key turning point", "focal point". Cut puffery, state what happened.
 2. **Name-dropping.** Listing media outlets without context. Pick one, say what was said.
 3. **Superficial -ing phrases.** "highlighting...", "ensuring...", "reflecting...", "showcasing...", "fostering...". Delete or expand with real sources.
 4. **Promotional language.** "nestled", "vibrant", "breathtaking", "groundbreaking", "renowned", "stunning", "must-visit". Use neutral descriptions.
-5. **Vague attributions.** "Experts believe", "Industry reports suggest", "Some critics argue". Name the source or delete.
+5. **Vague attributions.** "Experts believe", "Industry reports suggest", "Some critics argue", "Observers have noted", "widely interpreted", "several sources" when there is one. Name the source or delete.
 6. **Formulaic challenges.** "Despite challenges... continues to thrive." Replace with specific facts.
+7. **Vague association.** "associated with", "in connection with", "particularly associated with". "Sources identified her as associated with leadership of the company" means "she was the CEO". State the relationship.
 
 ### Language
 
-7. **AI vocabulary.** Additionally, crucial, delve, enduring, enhance, fostering, garner, interplay, intricate, landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore, vibrant. Replace with plain words.
-8. **Fancy ways to say "is" or "has".** "serves as", "stands as", "boasts", "features", "carries", "contains", "houses", "encompasses", "gains". Just say "is" or "has". For code, name the action: "`icon.ex` gains `icon_chevrons_left`" becomes "`icon.ex` - Adds `icon_chevrons_left`". "Holds" is the exception when the subject really is a container or binding, as in a variable or a CSS custom property. Everywhere else it is the same tell.
-9. **"Not just X, but Y."** State the point directly instead.
-10. **Rule of three.** Forcing ideas into groups of three. Use the natural number.
-11. **Synonym cycling.** Protagonist, main character, central figure, hero all in one paragraph. Pick one, repeat it.
-12. **False ranges.** "from X to Y" where X and Y aren't on a meaningful scale. List topics directly.
+8. **AI vocabulary.** Additionally, crucial, delve, enduring, enhance, fostering, garner, interplay, intricate, landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore, vibrant, quietly, multifaceted, meticulous, bolster, valuable insights, align with, resonate with, commitment to. Replace with plain words. Newer models also lean on "practical", "steady", "clearer", "dependable", "challenge", "prioritize" and "matters". These are too common to ban, but several in one paragraph is a tell.
+9. **Fancy ways to say "is" or "has".** "serves as", "stands as", "boasts", "features", "carries", "contains", "houses", "encompasses", "gains", "functions as", "operates as", "represents", "refers to". Just say "is" or "has". For code, name the action: "`icon.ex` gains `icon_chevrons_left`" becomes "`icon.ex` - Adds `icon_chevrons_left`". "Holds" is the exception when the subject really is a container or binding, as in a variable or a CSS custom property. Everywhere else it is the same tell.
+10. **Negative parallelism.** "Not just X, but Y", "It's not X, it's Y", "No X, no Y, just Z", and the multi-sentence version that sets up a misconception only to correct it. State the point directly.
+11. **Rule of three.** Forcing ideas into groups of three. Use the natural number.
+12. **Synonym cycling.** Protagonist, main character, central figure, hero all in one paragraph. Pick one, repeat it.
+13. **False ranges.** "from X to Y" where X and Y aren't on a meaningful scale. List topics directly.
+14. **Inflated plain verbs.** "authored" for "wrote", "passed away" for "died", "began his career as" or "ventured into" for "was". Use the plain verb.
 
 ### Style
 
-13. **Em dash overuse.** Avoid em dashes entirely. Use periods or commas only (no parentheses, no en dashes, no hyphen-as-dash substitutes). Em dashes are an AI tell, and reaching for parentheses instead just trades one tell for another. If a thought needs separation, end the sentence or use a comma.
-14. **Colon overuse.** Colons are fine before a list or example. Not as mid-sentence connectors. "If you're coming from traditional automation: instead of registering event handlers, you describe conditions" adds nothing with the colon. Rewrite to let the point stand on its own without comparison framing. "Describing when the scheduler should fire works best as plain English." Same meaning, no crutch punctuation.
-15. **Boldface overuse.** Don't bold every proper noun or acronym.
-16. **Inline-header lists.** The tell is a bold label and colon that restates the line: "**Performance:** Performance improved...". Convert those to prose. A bold lead-in that ends in a period, names the item, and is followed by genuinely new detail ("**Schema in TypeScript.** Tables live in one file.") is fine, not a tell.
-17. **Title case headings.** Use sentence case.
-18. **Decorative emojis.** Remove from headings and bullets.
-19. **Curly quotes.** Replace with straight quotes.
+15. **Em dash overuse.** Avoid em dashes entirely. Use periods or commas only (no parentheses, no en dashes, no hyphen-as-dash substitutes). Em dashes are an AI tell, and reaching for parentheses instead just trades one tell for another. If a thought needs separation, end the sentence or use a comma.
+16. **Colon overuse.** Colons are fine before a list or example. Not as mid-sentence connectors. "If you're coming from traditional automation: instead of registering event handlers, you describe conditions" adds nothing with the colon. Rewrite to let the point stand on its own without comparison framing. "Describing when the scheduler should fire works best as plain English." Same meaning, no crutch punctuation.
+17. **Boldface overuse.** Don't bold every proper noun or acronym.
+18. **Inline-header lists.** The tell is a bold label and colon that restates the line: "**Performance:** Performance improved...". Convert those to prose. A bold lead-in that ends in a period, names the item, and is followed by genuinely new detail ("**Schema in TypeScript.** Tables live in one file.") is fine, not a tell.
+19. **Title case headings.** Use sentence case.
+20. **Decorative emojis.** Remove from headings and bullets.
+21. **Curly quotes.** Replace with straight quotes.
+22. **Tables and headings.** A table for three facts that fit in a sentence. Headings that only wrap other headings. Skipped heading levels. Write the sentence, flatten the nesting.
 
 ### Communication artifacts
 
-20. **Chatbot phrases.** "I hope this helps!", "Let me know if...", "Of course!", "Certainly!", "Found the smoking gun!" Remove.
-21. **Cutoff disclaimers.** "While specific details are limited..." Find sources or remove.
-22. **Sycophantic tone.** "Great question! You're absolutely right!" Respond directly.
+23. **Chatbot phrases.** "I hope this helps!", "Let me know if...", "Of course!", "Certainly!", "Found the smoking gun!" Remove.
+24. **Cutoff disclaimers.** "While specific details are limited..." Find sources or remove.
+25. **Sycophantic tone.** "Great question! You're absolutely right!" Respond directly.
+26. **Answer framing.** "Here's a...", "Below is a detailed overview based on...", option labels like "Recommended:". Give the thing without introducing it.
+27. **Canned courtesy.** "I understand your concern", "I hope this message finds you well", "please point them out and I will try to resolve them". Write like a colleague, not a support desk.
+28. **Placeholders and tool artifacts.** "[Insert X]", "(Add your URL here)", "2025-XX-XX", "oaicite", "turn0search0", "utm_source=chatgpt.com". Fill them in or delete them before shipping.
 
 ### Filler
 
-23. **Filler phrases.** "In order to" becomes "To". "Due to the fact that" becomes "Because". "It is important to note that" gets deleted.
-24. **Excessive hedging.** "could potentially possibly be argued that it might" becomes "may".
-25. **Generic conclusions.** "The future looks bright." State specific plans or facts.
+29. **Filler phrases.** "In order to" becomes "To". "Due to the fact that" becomes "Because". "It is important to note that" gets deleted.
+30. **Excessive hedging.** "could potentially possibly be argued that it might" becomes "may".
+31. **Generic conclusions.** "The future looks bright." State specific plans or facts.
+32. **Section summaries.** "In summary", "Overall,", "Key takeaways", "Key highlights:". A recap of what the reader just read. Cut it.
+33. **Change-summary tells.** In commit messages and PR bodies: "while preserving the original meaning", "refined, enhanced, streamlined", "ensured X adheres to", "all claims verified", lists of what was retained or avoided. Say what changed. Leave out compliance claims and what stayed the same.
 
 ### Jargon
 
-26. **Abstract metaphor nouns and verbs.** Substrate, wedge, vector, locus, vantage, nexus, primitive (as noun), harness (as metaphor), surface (as in "API surface"), bedrock, scaffolding (as metaphor), modality, paradigm, gold-plating, ratchet (as metaphor), evacuate (for moving code), endgame, north star, flywheel. These read as technical but usually have a plainer concrete word. "Substrate" becomes "base". "Wedge in" becomes "add". "Vector" becomes "way" or "method". "Gold-plating" becomes "more than the job needs". "Ratchet" becomes the mechanism's real name or "a limit that only tightens". "Evacuate" becomes "move out". "Endgame" becomes "the last phase". Pick the concrete word.
+34. **Abstract metaphor nouns and verbs.** Substrate, wedge, vector, locus, vantage, nexus, primitive (as noun), harness (as metaphor), surface (as in "API surface"), bedrock, scaffolding (as metaphor), modality, paradigm, gold-plating, ratchet (as metaphor), evacuate (for moving code), endgame, north star, flywheel. These read as technical but usually have a plainer concrete word. "Substrate" becomes "base". "Wedge in" becomes "add". "Vector" becomes "way" or "method". "Gold-plating" becomes "more than the job needs". "Ratchet" becomes the mechanism's real name or "a limit that only tightens". "Evacuate" becomes "move out". "Endgame" becomes "the last phase". Pick the concrete word.
 
     Verbs do it too. "Four MapLibre behaviours shaped the hook", "the audit drove the rewrite", "the schema informs the types", "caching underpins it", "this unlocks batching". Each one gestures at a relationship instead of stating it. Say what actually follows from what: "four MapLibre behaviours explain why the hook looks the way it does", "we rewrote it after the audit", "the types come from the schema".
 
 ### Plain speech
 
-27. **Say what it does, not how it feels.** "the database stays close at hand", "SQL you can read", "types that follow your schema" name a feeling. The fix names the mechanism or a number: "`.toSQL()` returns the exact string sent to the database", "a column rename fails the build". Ask what the sentence tells the reader to do or know, then write that. If you can't restate it as a concrete instruction, fact, or number, cut it. One more check: if the sentence could appear unchanged in another project's docs, it says nothing about this one. Cut it.
+35. **Say what it does, not how it feels.** "the database stays close at hand", "SQL you can read", "types that follow your schema" name a feeling. The fix names the mechanism or a number: "`.toSQL()` returns the exact string sent to the database", "a column rename fails the build". Ask what the sentence tells the reader to do or know, then write that. If you can't restate it as a concrete instruction, fact, or number, cut it. One more check: if the sentence could appear unchanged in another project's docs, it says nothing about this one. Cut it.
 
     Two habits belong here. Praising a name instead of giving its value: "the token that names the intent", "the semantic name for the gap", "it expresses what we mean". Write the value and the name, "`--gap-text`, the same 2px". And reaching for a vague magnitude when an exact one exists: "inset by half a step", "a touch tighter", "slightly rounded". Name the token or the number, "offset inwards by `--space-0-5`".
-28. **Shorten or split dense sentences.** If the reader has to backtrack to parse a sentence, break it in two or drop clauses. One idea per sentence.
-29. **Active voice.** Prefer it. Catch "is/are/was/were + past participle" and name the actor: "queries are validated" becomes "the compiler validates queries", "the file is parsed by the loader" becomes "the loader parses the file". Passive is fine only when the actor is unknown or genuinely doesn't matter.
-30. **Cut adverbs, or use a stronger verb.** "runs quickly" becomes "is fast" or the number. "significantly improves" becomes the measured delta. An adverb propping up a weak verb means the verb is wrong.
-31. **Prefer the plain word.** "utilize" becomes "use", "leverage" becomes "use", "facilitate" becomes "help", "numerous" becomes "many", "in the event that" becomes "if". The fancier synonym is rarely clearer.
+36. **Shorten or split dense sentences.** If the reader has to backtrack to parse a sentence, break it in two or drop clauses. One idea per sentence.
+37. **Active voice.** Prefer it. Catch "is/are/was/were + past participle" and name the actor: "queries are validated" becomes "the compiler validates queries", "the file is parsed by the loader" becomes "the loader parses the file". Passive is fine only when the actor is unknown or genuinely doesn't matter.
+38. **Cut adverbs, or use a stronger verb.** "runs quickly" becomes "is fast" or the number. "significantly improves" becomes the measured delta. An adverb propping up a weak verb means the verb is wrong.
+39. **Prefer the plain word.** "utilize" becomes "use", "leverage" becomes "use", "facilitate" becomes "help", "numerous" becomes "many", "in the event that" becomes "if". The fancier synonym is rarely clearer.
 
 ### Flourishes
 
-32. **Rhetorical inversion.** "Gone are the per-file copies", "Gone are the days of", "What follows is". Rearranging a sentence for drama reads as copywriting. State it plainly, "the per-file copies are gone", or cut the sentence when a list below already says it.
-33. **Reassurance filler.** "Nothing breaks today", "worth a look", "rest assured", "the good news is". These tell the reader how to feel about a fact instead of giving them the fact. Keep the fact and drop the reassurance: "Every label in those files is plain text."
+40. **Rhetorical inversion.** "Gone are the per-file copies", "Gone are the days of", "What follows is". Rearranging a sentence for drama reads as copywriting. State it plainly, "the per-file copies are gone", or cut the sentence when a list below already says it.
+41. **Reassurance filler.** "Nothing breaks today", "worth a look", "rest assured", "the good news is". These tell the reader how to feel about a fact instead of giving them the fact. Keep the fact and drop the reassurance: "Every label in those files is plain text."

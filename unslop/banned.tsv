@@ -53,3 +53,32 @@
 \brather than\b	state what it does, without the contrast
 \binstead of\b	state what it does, without the contrast
 \bonly ever\b	cut the adverb
+\bnestled\b	cut
+\bbreathtaking\b	cut
+\bgroundbreaking\b	cut
+\brenowned\b	cut
+\bindelible\b	cut
+\bdeeply rooted\b	cut
+\bsetting the stage\b	state what happened
+\bevolving landscape\b	cut
+\bexperts (believe|argue|say)\b	name the source
+,\s+(highlighting|underscoring|emphasizing|reflecting|symbolizing|ensuring|contributing to)\b	cut the trailing -ing clause
+\bquietly\b	cut
+\bmultifaceted\b	cut, or name the facets
+\bmeticulous(ly)?\b	cut
+\bbolster(s|ed|ing)?\b	use "support" or the real verb
+\bvaluable insights?\b	say what was learned
+\b(align|resonate)s? with\b	say what matches what
+\bcommitment to\b	cut
+\bplays? an? (key|vital|crucial|significant) role\b	say what it does
+\breflects broader\b	cut
+\b(functions|operates) as\b	use "is"
+\bkey (takeaways|highlights)\b	cut the recap
+\bin summary\b	cut the recap
+\bfinds you well\b	cut
+\bI understand (your|the) concern\b	cut
+\bwhile preserving\b	say what changed
+\bstreamlin(e|ed|es|ing)\b	say what got shorter or faster
+\bwhy (this|it) matters\b	state the consequence
+\bit'?s not\b[^.]{0,60}\bit'?s\b	state the point directly
+\b(oaicite|contentReference|turn0search\d|utm_source=chatgpt)\b	chatbot artifact, remove
