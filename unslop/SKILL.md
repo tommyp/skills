@@ -13,6 +13,7 @@ Edit text to remove AI patterns and add human voice.
 2. Rewrite. Preserve meaning, match intended tone.
 3. Add soul (see next section).
 4. Self-audit: "What makes this obviously AI generated?" Fix remaining tells.
+5. Search the finished draft for the words this file names, "carries", "worth a look", "crucial", "showcase" and the rest. Two or three usually survive a first draft, and a pass done from memory misses them. The full word list is `banned.tsv` beside this file, and `~/.claude/hooks/unslop_lint.py` blocks any file edit, PR body or reply that adds one. Add new words to `banned.tsv`, not just this file.
 
 ## Adding soul
 
@@ -39,7 +40,7 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 ### Language
 
 7. **AI vocabulary.** Additionally, crucial, delve, enduring, enhance, fostering, garner, interplay, intricate, landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore, vibrant. Replace with plain words.
-8. **Fancy ways to say "is" or "has".** "serves as", "stands as", "boasts", "features", "carries", "contains", "houses", "encompasses". Just say "is" or "has". "Holds" is the exception when the subject really is a container or binding, as in a variable or a CSS custom property. Everywhere else it is the same tell.
+8. **Fancy ways to say "is" or "has".** "serves as", "stands as", "boasts", "features", "carries", "contains", "houses", "encompasses", "gains". Just say "is" or "has". For code, name the action: "`icon.ex` gains `icon_chevrons_left`" becomes "`icon.ex` - Adds `icon_chevrons_left`". "Holds" is the exception when the subject really is a container or binding, as in a variable or a CSS custom property. Everywhere else it is the same tell.
 9. **"Not just X, but Y."** State the point directly instead.
 10. **Rule of three.** Forcing ideas into groups of three. Use the natural number.
 11. **Synonym cycling.** Protagonist, main character, central figure, hero all in one paragraph. Pick one, repeat it.
@@ -69,11 +70,15 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 
 ### Jargon
 
-26. **Abstract metaphor nouns.** Substrate, wedge, vector, locus, vantage, nexus, primitive (as noun), harness (as metaphor), surface (as in "API surface"), bedrock, scaffolding (as metaphor), modality, paradigm, gold-plating, ratchet (as metaphor), evacuate (for moving code), endgame, north star, flywheel. These read as technical but usually have a plainer concrete word. "Substrate" becomes "base". "Wedge in" becomes "add". "Vector" becomes "way" or "method". "Gold-plating" becomes "more than the job needs". "Ratchet" becomes the mechanism's real name or "a limit that only tightens". "Evacuate" becomes "move out". "Endgame" becomes "the last phase". Pick the concrete word.
+26. **Abstract metaphor nouns and verbs.** Substrate, wedge, vector, locus, vantage, nexus, primitive (as noun), harness (as metaphor), surface (as in "API surface"), bedrock, scaffolding (as metaphor), modality, paradigm, gold-plating, ratchet (as metaphor), evacuate (for moving code), endgame, north star, flywheel. These read as technical but usually have a plainer concrete word. "Substrate" becomes "base". "Wedge in" becomes "add". "Vector" becomes "way" or "method". "Gold-plating" becomes "more than the job needs". "Ratchet" becomes the mechanism's real name or "a limit that only tightens". "Evacuate" becomes "move out". "Endgame" becomes "the last phase". Pick the concrete word.
+
+    Verbs do it too. "Four MapLibre behaviours shaped the hook", "the audit drove the rewrite", "the schema informs the types", "caching underpins it", "this unlocks batching". Each one gestures at a relationship instead of stating it. Say what actually follows from what: "four MapLibre behaviours explain why the hook looks the way it does", "we rewrote it after the audit", "the types come from the schema".
 
 ### Plain speech
 
 27. **Say what it does, not how it feels.** "the database stays close at hand", "SQL you can read", "types that follow your schema" name a feeling. The fix names the mechanism or a number: "`.toSQL()` returns the exact string sent to the database", "a column rename fails the build". Ask what the sentence tells the reader to do or know, then write that. If you can't restate it as a concrete instruction, fact, or number, cut it. One more check: if the sentence could appear unchanged in another project's docs, it says nothing about this one. Cut it.
+
+    Two habits belong here. Praising a name instead of giving its value: "the token that names the intent", "the semantic name for the gap", "it expresses what we mean". Write the value and the name, "`--gap-text`, the same 2px". And reaching for a vague magnitude when an exact one exists: "inset by half a step", "a touch tighter", "slightly rounded". Name the token or the number, "offset inwards by `--space-0-5`".
 28. **Shorten or split dense sentences.** If the reader has to backtrack to parse a sentence, break it in two or drop clauses. One idea per sentence.
 29. **Active voice.** Prefer it. Catch "is/are/was/were + past participle" and name the actor: "queries are validated" becomes "the compiler validates queries", "the file is parsed by the loader" becomes "the loader parses the file". Passive is fine only when the actor is unknown or genuinely doesn't matter.
 30. **Cut adverbs, or use a stronger verb.** "runs quickly" becomes "is fast" or the number. "significantly improves" becomes the measured delta. An adverb propping up a weak verb means the verb is wrong.

@@ -1,0 +1,55 @@
+# Regex (case-insensitive, Python syntax) <TAB> advice. Read by ~/.claude/hooks/unslop_lint.py.
+# Text inside `backticks`, fenced code blocks or "double quotes" is not checked, so quote a word to name it.
+\badditionally\b	cut it, or use "also"
+\bcrucial\b	say why it matters
+\bdelv(e|es|ed|ing)\b	use "look at" or cut
+\benduring\b	cut
+\benhanc(e|es|ed|ing)\b	say what improves and by how much
+\bfoster(s|ed|ing)?\b	cut
+\bgarner(s|ed|ing)?\b	use "get"
+\binterplay\b	say what affects what
+\bintricate\b	cut, or say what makes it complex
+\bpivotal\b	cut
+\bshowcas(e|es|ed|ing)\b	use "show"
+\btapestry\b	cut
+\btestament\b	cut
+\bunderscor(e|es|ed|ing)\b	cut, or use "shows"
+\bvibrant\b	cut
+\bserves as\b	use "is"
+\bstands as\b	use "is"
+\bboasts?\b	use "has"
+\bfeatures\b	use "has", or name the thing
+\bcarr(y|ies|ied|ying)\b	use "has", "is" or the real verb
+\bcontains\b	use "has", or name the action
+\bhouses\b	use "has"
+\bholds\b	use "has" or the real verb, unless it is a variable or custom property
+\bencompass(es|ed|ing)?\b	use "covers" or "has"
+\bgains?\b	name the action ("adds")
+\bnot (just|only)\b[^.]{0,80}\bbut\b	state the point directly
+—	no em dashes: use a period or comma
+–	no en dashes: use a period or comma
+\bhope this helps\b	cut
+\blet me know if\b	cut
+\bof course\b	cut
+\bcertainly\b	cut
+\bin order to\b	use "to"
+\bdue to the fact\b	use "because"
+\bit is important to note\b	cut
+\b(substrate|locus|vantage|nexus|bedrock|modality|paradigm|flywheel|endgame)\b	use the concrete word
+\bnorth star\b	use the concrete word
+\bgold-plating\b	use "more than the job needs"
+\bunderpin(s|ned|ning)?\b	say what follows from what
+\bunlock(s|ed|ing)?\b	say what it lets you do
+\butili[sz](e|es|ed|ing|ation)\b	use "use"
+\bleverag(e|es|ed|ing)\b	use "use"
+\bfacilitat(e|es|ed|ing)\b	use "help"
+\bnumerous\b	use "many"
+\bin the event that\b	use "if"
+\bgone are\b	state it plainly
+\bnothing breaks\b	keep the fact, drop the reassurance
+\bworth a look\b	keep the fact, drop the reassurance
+\brest assured\b	cut
+\bthe good news is\b	cut
+\brather than\b	state what it does, without the contrast
+\binstead of\b	state what it does, without the contrast
+\bonly ever\b	cut the adverb

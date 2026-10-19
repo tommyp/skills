@@ -48,7 +48,8 @@ skim the commit log too if there are several commits.
 - Open with a couple of sentences starting with **"This PR..."**
 - Summarise the changes — prose or a list, whichever reads better for the size of the change
 - Call out anything unusual (a rename, a behaviour change, a workaround) — this is the part a
-  reviewer would ask about if it went unmentioned
+  reviewer would ask about if it went unmentioned. When these get their own list, introduce
+  it with `Notes:`, never "Things a reviewer might ask about" or similar
 - Don't mention what the PR *doesn't* do, unless a reader would reasonably expect it (e.g.
   "no migration needed" when the diff touches a schema-adjacent area)
 - No test-plan checklist, no "Generated with Claude Code" footer, no Co-authored-by trailer —
@@ -65,11 +66,31 @@ skim the commit log too if there are several commits.
 ### Screenshots
 
 If the diff is a visual change (CSS, a component template, anything LiveView-rendered), add
-a `## Screenshot` (one image) or `## Screenshots` (more than one) section. `gh` has no way to
-upload an image to a PR body, so always leave a `_TODO: screenshot_` placeholder under the
-heading and create the PR anyway — don't ask the user to attach one in chat, and don't block
-on it. In update mode, only add this section if one isn't already present in the existing PR
-body worth preserving.
+a `## Screenshot` (one image) or `## Screenshots` (more than one) section. In update mode,
+only add this section if one isn't already present in the existing PR body worth preserving.
+
+Capture each changed Storybook variation with headless Chrome against the dev server on port
+4000 (never start it). The checked-out branch is what renders, so switch to the PR's branch
+and `mix compile` first. Size the window tight to the content and render at 2x:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu \
+  --hide-scrollbars --virtual-time-budget=5000 --window-size=<w>,<h> \
+  --force-device-scale-factor=2 --screenshot=<scratchpad>/<name>.png \
+  "http://localhost:4000/storybook/iframe/components/<category>/<component>?variation_id=<id>"
+```
+
+Read each PNG back before using it. An unstyled render means the CSS hadn't rebuilt yet, so
+take it again.
+
+Under the heading, reference each image by its local path with alt text,
+`![Detail list with five rows](./detail_list.png)`, and pass the file with `--attach` to
+`gh pr create` or `gh pr edit`, run from the directory the paths are relative to. `gh` uploads
+the file and rewrites the local reference to the uploaded URL in place. `--attach` needs `gh`
+2.99.0 or later. If `gh --version` is older and `brew upgrade gh` fails, download the release
+binary with `gh release download --repo cli/cli --pattern '*macOS_arm64.zip'` into the
+scratchpad and use that. If no screenshot can be captured, fall back to a `_TODO: screenshot_`
+placeholder and create the PR anyway.
 
 ### Unslop pass
 
@@ -81,7 +102,8 @@ already shows, and sentences that cram two unrelated points together.
 
 ## Step 4 — Present for approval
 
-Show the title, the full body exactly as it will appear (screenshot section included), and
+Show the title, the full body exactly as it will appear (screenshot section included, with
+the local image paths and the PNGs read back so the user can see them), and
 whether it's a draft (new PR) or an update to the existing PR — **before** creating or
 editing anything. Wait for explicit go-ahead; if the user asks for changes, fold them in and
 re-show before proceeding.
@@ -97,7 +119,7 @@ For a new PR, create it with the approved title/body via a heredoc so formatting
 gh pr create --title "<title>" --body "$(cat <<'EOF'
 <body>
 EOF
-)" [--draft]
+)" [--draft] [--attach ./<name>.png ...]
 ```
 
 For an update to an existing PR, edit it in place instead — don't pass `--draft` or any
@@ -107,7 +129,7 @@ ready-for-review flag, since `gh pr edit` doesn't touch that state and none was 
 gh pr edit <number> --title "<title>" --body "$(cat <<'EOF'
 <body>
 EOF
-)"
+)" [--attach ./<name>.png ...]
 ```
 
 Report the PR URL back to the user.

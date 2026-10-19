@@ -51,10 +51,16 @@ has actually pushed back on.
   assign before the template. Look especially at FormField-resolution clauses
   (`field.name`/`field.value`/`field.errors`) and any `socket.assigns.*` reads — these are
   plain Elixir function bodies, not templates, so the exception doesn't apply.
-- **Boolean attrs and assigns get a `?` suffix**, no exceptions for "it matches the HTML
-  attribute name" (e.g. `attr :show_count?, :boolean`, not `:show_count`, even though the
-  rendered HTML has no `?`). Check both the `attr` declaration and any local assign/variable
-  built from it (`show_denominator?`, not `show_denominator`).
+- **Boolean attrs and assigns get a `?` suffix** (e.g. `attr :show_count?, :boolean`, not
+  `:show_count`, even though the rendered HTML has no `?`). Check both the `attr` declaration
+  and any local assign/variable built from it (`show_denominator?`, not `show_denominator`).
+  The one exception is an attr rendered *verbatim* as a same-named HTML boolean attribute —
+  `attr :checked` feeding `checked={@checked}` is correct and should not be flagged, because
+  the `disabled`/`readonly`/`required` siblings forwarded through `attr :rest, :global,
+  include: ~w(...)` are named for the HTML attributes and can't take a suffix either. A
+  boolean rendered under a *different* name still takes the suffix: `selected?` →
+  `aria-selected`, `indeterminate?` → `data-indeterminate` (a DOM property, not an HTML
+  attribute). See the HTML-mirrored boolean attrs rule in the Phoenix style guide.
 - **Batch multiple `assign/2` calls into one**: when several keys are being set on the socket
   or assigns in sequence, combine them into a single `assign(socket, key1: val1, key2: val2,
   ...)` rather than chaining separate `assign` calls.
@@ -62,6 +68,17 @@ has actually pushed back on.
   component actually defines `attr :error?`, copying the example produces broken/no-op code.
   Check every example snippet against the actual `attr`/`slot` names in the same file.
 - Check the diff against the Credo rule summary in the Elixir style guide.
+- **Web code reads through scope-first context functions, never `Repo`.** A builder or
+  LiveView under `hyphae_web/` that calls `Repo.all`, `Repo.aggregate` or `Repo.preload`, or
+  pipes a `*.Query` module into `Repo` itself, skips the scope check. The only organization
+  check left is whatever fetched the parent record. Move each read into the owning context
+  (`Sites`, `Observations`, `Projects`) as a function taking `Scope` first, with
+  `Scope.assert_owner!/2` or an organization filter. An older builder doing the same thing
+  (`ObjectiveListing`'s `Repo.preload`) is a precedent to fix, not one to copy. (@ijdickinson)
+- **No bare UUIDs between functions.** A builder or context function taking `id` instead of a
+  `Project.id_only()` struct gets flagged every time. Wrap the URL param at the LiveView
+  boundary (`%Project{id: id}`) and pass the struct down. Fake-data modules due to be deleted
+  get a pass. (@ijdickinson)
 
 ### CSS token layering & formatting (colocated CSS — @slashdotdash, @Copilot, @ijdickinson)
 
@@ -197,6 +214,26 @@ even when nothing else looks wrong.
   `value`/`errors`/`disabled`/`loading`-driven changes a form-validation cycle needs to apply.
   If part of the ignored subtree must still react to server state, either narrow the ignored
   region or reconcile in `updated()` (see [[project_select-updated-hook-reconciliation]]).
+- **Don't preload a whole association to call `length/1` on it.** Every preloaded row costs
+  memory and I/O, and LiveView mounts twice (dead render, then connected), so the queries run
+  twice per page view. Preload only what the template renders field by field. Get counts from
+  a count query (`Ecto.assoc(project, :supporting_documents) |> Repo.aggregate(:count)` inside
+  the context). (@ijdickinson)
+- **Totals summed across related records double-count shared rows.** Adding up per-site
+  hectares counts overlapping or nested sites (`SiteSfContains`) twice. Counting join rows
+  (`count(parcel_link.id)`) counts a parcel linked to two sites twice. Aggregate across the
+  whole set instead: `st_area(st_union(...))` for area, `count(x.parcel_id, :distinct)` for
+  shared records. (@ijdickinson)
+- **Geometry columns are plain `geometry` with no SRID constraint, so handle SRID the same way
+  in every expression.** `st_setsrid(?, 4326)` on one column next to a bare `::geography`
+  cast on another breaks in two ways. The cast raises on a projected SRID (27700), and
+  `st_setsrid` relabels metres as degrees. Normalize once: treat SRID 0 as 4326 and
+  `st_transform` anything else, then measure. Add a test with a projected-SRID geometry.
+  (@ijdickinson)
+- **Don't assume the UK.** Hyphae will run projects outside the UK in WGS84. British National
+  Grid reprojection, OS grid references and other UK-only formats don't belong in general
+  code, even when the Figma mockup shows a UK example. Raise the format with design rather
+  than building the UK-only version. (@ijdickinson)
 - **Guard colocated-hook keyboard/pointer handlers against empty collections.** A hook that
   opens a listbox/menu and immediately highlights index `0` (or acts on the "active" index)
   will throw if the option list is empty and the index is left at `-1`. Check length before
@@ -243,6 +280,23 @@ even when nothing else looks wrong.
   or just a thematic grouping (`section`).
 - Storybook `:ai_mode` (or similar) variation-group wrappers should reuse the flex+gap layout
   other component stories already apply for grouped variations, not an unstyled wrapper div.
+- **Simple questions get simple code.** Flag guards and arithmetic that another clause
+  already covers, e.g. `max(length(sites) - 1, 0)` when a `nil` clause already handles the
+  no-sites case. Ian reads these as convoluted.
+- **Every view model field has a reader.** For each field on a `*View` struct, check the
+  template, `mount` or a test uses it, and drop it if nothing does. A raw `UUID.t()` field
+  draws the "should this be `Project.id_only()`?" question.
+- **New data loaders follow a pattern the context already uses.** Contexts already mix
+  `Ecto.assoc |> Repo.aggregate` counts, `get_*!` with `:preload` options, and query
+  modules. Flag a new loader that invents another way. Soft flag: Ian has raised the wider
+  question for team discussion.
+
+### Domain model (@ijdickinson)
+
+- **Domain concepts come from the ontology.** Flag any hand-written module under
+  `Hyphae.Domain.*` that isn't a generated schema or a query module, such as a struct for a
+  query result (PR #309's `Sites.Footprint`). Context functions return primitives or
+  existing schema types, and the LiveView's builder does any reshaping.
 
 ### Naming & semantics (@violet-hall-verna, @ijdickinson)
 
@@ -258,6 +312,9 @@ even when nothing else looks wrong.
 - Variant/token names worth a second look when they encode an implementation detail rather
   than intent (e.g. `ghost` vs. a more descriptive `text-only`) — soft, non-blocking, but
   worth surfacing as a question.
+- **Name values after the ontology property they read.** A variable or helper over
+  `post_name` is `post_name`, not `town`. Check the field's IRI (`locn:postName` is the
+  postal division) before picking a friendlier word.
 
 ### Explanatory comments (@josef-bolt)
 
